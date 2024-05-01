@@ -27,7 +27,7 @@ pipeline {
             }
         }
         
-        stage('Rest') 
+        stage('Rest') {
             steps {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE'){
                     bat '''
