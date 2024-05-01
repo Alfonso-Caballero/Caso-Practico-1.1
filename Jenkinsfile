@@ -12,7 +12,7 @@ pipeline {
             steps {
                 echo 'Esto es python'
                 echo WORKSPACE
-                bat 'dir'
+                dir
             }
         }
         
