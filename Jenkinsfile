@@ -35,7 +35,7 @@ pipeline {
                         start flask run
                         start java -jar C:\\Users\\alfon\\My_Projects\\Caso-Practico-1.1\\test\\wiremock\\wiremock-standalone-3.5.4.jar --port 9090 --root-dir test\\wiremock
                         set PYTHONPATH=.
-                        pytest --junitxml=rest.xml test\\rest
+                        pytest --junitxml=result-rest.xml test\\rest
                         '''
                     }
                 }
