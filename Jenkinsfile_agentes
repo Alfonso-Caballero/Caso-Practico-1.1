@@ -9,7 +9,7 @@ pipeline {
                 label 'ubuntu'
             }
             steps {
-                sh 'git clone https://github.com/Alfonso-Caballero/Caso-Practico-1.1.git'
+                sh 'git clone --single-branch --branch feature_fix_racecond https://github.com/Alfonso-Caballero/Caso-Practico-1.1.git'
                 sh 'whoami'
                 sh 'hostname'
                 echo "${WORKSPACE}"
