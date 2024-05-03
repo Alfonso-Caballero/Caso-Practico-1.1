@@ -1,0 +1,19 @@
+pipeline {
+    agent none
+    
+    stages {
+        stage('Get Code') {
+            agent {
+                label 'ubuntu'
+            }
+            steps {
+                sh 'whoami'
+                sh 'hostname'
+                echo "${WORKSPACE}"
+                stash name: 'code-unit', includes: '**/*'
+                stash name: 'code-test', includes: '**/*'
+}
+}
+}
+}
+            
