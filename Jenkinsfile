@@ -4,9 +4,7 @@ pipeline {
     stages {
         stage('Get Code') {
             steps {
-                script {
-                    git branch: 'develop', url: 'https://github.com/Alfonso-Caballero/Caso-Practico-1.1.git'
-                }
+                git branch: 'develop', url: 'https://github.com/Alfonso-Caballero/Caso-Practico-1.1.git'
             }
         }
         
