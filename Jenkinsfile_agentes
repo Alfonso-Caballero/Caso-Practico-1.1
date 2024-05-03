@@ -7,9 +7,8 @@ pipeline {
                 label 'ubuntu'
             }
             steps {
-                sh 'git config http.postBuffer 524288000'
                 sh 'git clone https://github.com/Alfonso-Caballero/Caso-Practico-1.1.git'
-                sh 'git init'
+                sleep 1
                 sh 'whoami'
                 sh 'hostname'
                 echo "${WORKSPACE}"
