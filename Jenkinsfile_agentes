@@ -81,9 +81,17 @@ pipeline {
                                 sh '''
                                     export FLASK_APP=$WORKSPACE/Caso-Practico-1.1/app/api.py
                                     flask run --port=5000 &
+                                   '''
+                                sh '''
+                                    until nc -z localhost 5000; do
+                                        echo "Waiting for Flask server to start..."
+                                        sleep 1
+                                    done
+                                   '''
+                                sh '''
                                     export PYTHONPATH=$WORKSPACE
                                     pytest --junitxml=result-test.xml test/rest
-                                '''
+                                   '''
                                 sh 'whoami'
                                 sh 'hostname'
                                 echo "${WORKSPACE}"
