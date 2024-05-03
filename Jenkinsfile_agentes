@@ -7,11 +7,6 @@ pipeline {
                 label 'ubuntu'
             }
             steps {
-                sh 'apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0'
-                sh 'apt-add-repository https://cli.github.com/packages'
-                sh 'apt update'
-                sh 'apt install gh'
-                sh 'gh repo clone Alfonso-Caballero/Caso-Practico-1.1'
                 sleep 1
                 sh 'whoami'
                 sh 'hostname'
