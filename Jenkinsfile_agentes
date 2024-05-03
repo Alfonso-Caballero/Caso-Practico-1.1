@@ -12,8 +12,6 @@ pipeline {
                 sh 'whoami'
                 sh 'hostname'
                 echo "${WORKSPACE}"
-                stash name: 'code-unit', includes: '**/*'
-                stash name: 'code-test', includes: '**/*'
 }
 }
 }
