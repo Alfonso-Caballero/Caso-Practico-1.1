@@ -7,7 +7,7 @@ pipeline {
                 label 'ubuntu'
             }
             steps {
-                sh 'git clone https://github.com/Alfonso-Caballero/Caso-Practico-1.1.git'
+                sh 'git init https://github.com/Alfonso-Caballero/Caso-Practico-1.1.git'
                 sleep 1
                 sh 'whoami'
                 sh 'hostname'
