@@ -74,6 +74,9 @@ pipeline {
                                 sh '''
                                     export FLASK_APP=$WORKSPACE/Caso-Practico-1.1/app/api.py
                                     flask run --port=5000 &
+                                    '''
+                                    sleep 3
+                                sh  '''
                                     export PYTHONPATH=$WORKSPACE
                                     pytest --junitxml=result-test.xml test/rest
                                 '''
