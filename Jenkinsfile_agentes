@@ -1,6 +1,8 @@
 pipeline {
     agent none
-    
+    options {
+        skipDefaultCheckout() // Evitar la clonación predeterminada del repositorio
+    }
     stages {
         stage('Get Code') {
             agent {
