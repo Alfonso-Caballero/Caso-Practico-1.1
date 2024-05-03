@@ -8,6 +8,7 @@ pipeline {
             }
             steps {
                 sh 'git clone https://github.com/Alfonso-Caballero/Caso-Practico-1.1.git'
+                sh 'git init'
                 sh 'whoami'
                 sh 'hostname'
                 echo "${WORKSPACE}"
