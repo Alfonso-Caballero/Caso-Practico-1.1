@@ -72,7 +72,12 @@ pipeline {
                             unstash 'code-test'
                             dir ("${WORKSPACE}/Caso-Practico-1.1") {
                                 sh "java -jar test/wiremock/wiremock-standalone-3.5.4.jar --port 9090 --root-dir test/wiremock &"
-                                sleep 3
+                                sh '''
+                                    until nc -z localhost 9090; do
+                                        echo "Waiting for WireMock server to start..."
+                                        sleep 1
+                                    done
+                                   '''
                                 sh '''
                                     export FLASK_APP=$WORKSPACE/Caso-Practico-1.1/app/api.py
                                     flask run --port=5000 &
