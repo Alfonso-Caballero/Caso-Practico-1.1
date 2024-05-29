@@ -16,7 +16,7 @@ pipeline {
                         catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS'){
                             bat '''
                                 set PYTHONPATH=.
-                                pytest --junitxml=result-unit.xml --cov=app --cov-report=xml:test-reports/coverage-unit.xml --omit=app/__init__.py,app/api.py test/unit || exit /b 0
+                                pytest --junitxml=result-unit.xml --cov=app --cov-report=xml:test-reports\\coverage-unit.xml --omit=app\\__init__.py,app/api.py test/unit
                                 '''
                             junit 'result-unit.xml'
                             stash name: 'coverage', includes: 'test-reports/coverage-unit.xml'
