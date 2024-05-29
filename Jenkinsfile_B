@@ -1,0 +1,111 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Get Code') {
+            steps {
+                git 'https://github.com/Alfonso-Caballero/Caso-Practico-1.1.git'
+            }
+        }
+        
+        stage('Tests'){
+            parallel{
+        
+                stage('Unit') {
+                    steps {
+                        catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS'){
+                            bat '''
+                                set PYTHONPATH=.
+                                pytest --junitxml=result-unit.xml --cov=app --cov-report=xml:test-reports/coverage-unit.xml test\\unit || exit /b 0
+                                '''
+                            junit 'result-unit.xml'
+                            stash name: 'coverage', includes: 'test-reports/coverage-unit.xml'
+                        }
+                    }
+                }
+                
+                stage('Rest') {
+                    steps {
+                        catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS'){
+                            bat '''
+                                set FLASK_APP=app\\api.py
+                                start flask run
+                                '''
+                            bat '''
+                                @echo off
+                                :loop
+                                    >nul 2>&1 ( 
+                                        netstat -an | find "5000" | find "LISTENING"
+                                    )
+                                    if errorlevel 1 (
+                                        echo Waiting for Flask server to start...
+                                        timeout /t 1 >nul
+                                        goto loop
+                                    )
+                                echo Flask server is up and running.
+                                '''
+                            bat '''
+                                start java -jar C:\\Users\\alfcabal\\Desktop\\DevOps\\Repositorio-Pruebas\\Caso-Practico-1.1-master\\test\\wiremock\\wiremock-standalone-3.5.4.jar --port 9090 --root-dir test\\wiremock
+                                '''
+                            bat '''
+                                @echo off
+                                :loop
+                                    >nul 2>&1 ( 
+                                        netstat -an | find "9090" | find "LISTENING"
+                                    )
+                                    if errorlevel 1 (
+                                        echo Waiting for WireMock server to start...
+                                        timeout /t 1 >nul
+                                        goto loop
+                                    )
+                                echo WireMock server is up and running.
+                                '''
+                                
+                            bat '''
+                                set PYTHONPATH=.
+                                pytest --junitxml=result-rest.xml test\\rest || exit /b 0
+                                '''
+                            }
+                        }
+                    }
+            }
+        }
+        
+        stage('Static'){
+            steps{
+                bat'''
+                    flake8 --exit-zero --format=pylint app >flake8.out
+                    '''
+                recordIssues tools: [flake8(name: 'Flake8', pattern: 'flake8.out')], qualityGates: [[threshold: 8, type: 'TOTAL', unstable: true], [threshold: 10, type: 'TOTAL', unstable: false]]
+            }
+        }
+        
+        stage('Security'){
+            steps{
+                bat'''
+                    bandit --exit-zero -r . -f custom -o bandit.out --severity-level medium --msg-template "{abspath}:{line}: [{test_id}] {msg}"
+                    '''
+                recordIssues tools: [pyLint(name: 'Bandit', pattern: 'bandit.out')], qualityGates: [[threshold: 2, type: 'TOTAL', unstable: true], [threshold: 4, type: 'TOTAL', unstable: false]]
+            }
+        }
+        
+        stage('Cobertura') {
+            steps {
+                unstash 'coverage'
+                catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE'){
+                    cobertura autoUpdateHealth: false, autoUpdateStability: false, conditionalCoverageTargets: '80, 0, 90', failUnhealthy: false, failUnstable: false, lineCoverageTargets: '85, 0, 95', maxNumberOfBuilds: 0, onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false, coberturaReportFile: 'test-reports/coverage-unit.xml'
+                }
+            }
+        }
+        
+        stage('Performance') {
+            steps {
+                    
+                    bat '''C:\\Users\\alfcabal\\Downloads\\apache-jmeter-5.6.3\\apache-jmeter-5.6.3\\bin\\jmeter -n -t C:\\Users\\alfcabal\\Downloads\\apache-jmeter-5.6.3\\apache-jmeter-5.6.3\\bin\\test-plan.jmx -f -l flask.jtl'''
+                    
+                    perfReport sourceDataFiles: 'flask.jtl'
+                            
+                        }
+                    }
+    }
+}
