@@ -12,6 +12,15 @@ pipeline {
                 echo "${WORKSPACE}"
             }
         }
+        stage('Prueba') {
+            agent {
+                label 'agent1'
+                }
+                steps {
+                    sh 'whoami'
+                    sh 'hostname'
+                    echo "${WORKSPACE}"
+                    }
     }
     post {
             always {
