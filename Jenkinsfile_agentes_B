@@ -6,9 +6,9 @@ pipeline {
     stages {
         stage('Get Code') {
             steps {
-                sh 'git clone https://github.com/Alfonso-Caballero/Caso-Practico-1.1.git'
-                sh 'whoami'
-                sh 'hostname'
+                git https://github.com/Alfonso-Caballero/Caso-Practico-1.1.git
+                echo 'whoami'
+                echo 'hostname'
                 echo "${WORKSPACE}"
             }
         }
