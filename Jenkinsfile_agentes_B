@@ -28,7 +28,7 @@ pipeline {
                             sh 'python3 -m coverage run --branch --source=app --omit=app/__init__.py,app/api.py -m pytest --junitxml=result-unit.xml test/unit'
         
                             // Generate the coverage XML report
-                            sh 'coverage xml -o test-reports/coverage-unit.xml'
+                            sh 'python3 -m coverage xml -o test-reports/coverage-unit.xml'
         
                             // Process the JUnit XML result
                             junit 'result-unit.xml'
