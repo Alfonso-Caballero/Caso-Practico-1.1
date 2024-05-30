@@ -7,8 +7,8 @@ pipeline {
         stage('Get Code') {
             steps {
                 git 'https://github.com/Alfonso-Caballero/Caso-Practico-1.1.git'
-                echo 'whoami'
-                echo 'hostname'
+                bat 'whoami'
+                bat 'hostname'
                 echo "${WORKSPACE}"
             }
         }
