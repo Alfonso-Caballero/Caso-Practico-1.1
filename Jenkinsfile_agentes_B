@@ -14,7 +14,7 @@ pipeline {
         }
         stage('Unit') {
                     steps {
-                        catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS'){
+                        catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE'){
                             sh 'export PYTHONPATH=.'
 
                             // Run the tests with coverage
