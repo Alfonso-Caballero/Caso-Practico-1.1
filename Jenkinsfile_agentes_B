@@ -20,7 +20,7 @@ pipeline {
                             sh 'hostname'
                             sh "${WORKSPACE}"
 
-                            sh 'export PYTHONPATH=${WORKSPACE}'
+                            sh 'export PYTHONPATH=$WORKSPACE'
 
                             // Run the tests with coverage
                             sh 'coverage run --branch --source=app --omit=app/__init__.py,app/api.py -m pytest --junitxml=result-unit.xml test/unit'
