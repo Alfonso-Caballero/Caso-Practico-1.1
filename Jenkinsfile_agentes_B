@@ -23,7 +23,7 @@ pipeline {
                             sh 'export PYTHONPATH=$WORKSPACE'
 
                             // Run the tests with coverage
-                            sh 'coverage run --branch --source=app --omit=app/__init__.py,app/api.py -m pytest --junitxml=result-unit.xml test/unit'
+                            sh 'python3 -m coverage run --branch --source=app --omit=app/__init__.py,app/api.py -m pytest --junitxml=result-unit.xml test/unit'
         
                             // Generate the coverage XML report
                             sh 'coverage xml -o test-reports/coverage-unit.xml'
