@@ -1,0 +1,134 @@
+pipeline {
+    agent none
+    options {
+        skipDefaultCheckout() // Default repository cloning fails, causing pipeline failure
+    }
+    stages {
+        stage('Get Code') {
+            agent {
+                label 'ubuntu'
+            }
+            steps {
+                sh 'git clone https://github.com/Alfonso-Caballero/Caso-Practico-1.1.git'
+                sh 'whoami'
+                sh 'hostname'
+                echo "${WORKSPACE}"
+                stash name: 'code-unit', includes: '**/*'
+                stash name: 'code-test', includes: '**/*'
+            }
+            
+            post {
+                always {
+                    cleanWs(deleteDirs: true)
+                }
+            }
+        } 
+        
+        stage('Build') {
+            agent {
+                label 'linux'
+            }
+            steps {
+                echo 'Esto es python'
+                sh 'whoami'
+                sh 'hostname'
+                echo "${WORKSPACE}"
+            }
+            
+            post {
+                always {
+                    cleanWs(deleteDirs: true)
+                }
+            }
+        }
+        
+        stage('Tests') {
+            parallel {
+                stage('Unit') {
+                    agent{
+                        label 'linux2'
+                    }
+                    steps {
+                        catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                            unstash 'code-unit'
+                            sh '''
+                                export PYTHONPATH=$WORKSPACE/Caso-Practico-1.1
+                                pytest --junitxml=result-unit.xml Caso-Practico-1.1/test/unit
+                            '''
+                            stash name: 'results-unit', includes:'result-unit.xml'
+                            sh 'whoami'
+                            sh 'hostname'
+                            echo "${WORKSPACE}"
+                        }
+                    }
+                }
+                
+                stage('Rest') {
+                    agent {
+                        label 'linux2'
+                    }
+                    steps {
+                        catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                            unstash 'code-test'
+                            dir ("${WORKSPACE}/Caso-Practico-1.1") {
+                                sh "java -jar test/wiremock/wiremock-standalone-3.5.4.jar --port 9090 --root-dir test/wiremock &"
+                                /*
+                                sh '''
+                                    until nc -z localhost 9090; do
+                                        echo "Waiting for WireMock server to start..."
+                                        sleep 1
+                                    done
+                                   '''
+                                */
+                                sh '''
+                                    export FLASK_APP=$WORKSPACE/Caso-Practico-1.1/app/api.py
+                                    flask run --port=5000 &
+                                   '''
+                                /*
+                                sh '''
+                                    until nc -z localhost 5000; do
+                                        echo "Waiting for Flask server to start..."
+                                        sleep 1
+                                    done
+                                   '''
+                                */
+                                sh '''
+                                    export PYTHONPATH=$WORKSPACE
+                                    pytest --junitxml=result-test.xml test/rest
+                                   '''
+                                sh 'whoami'
+                                sh 'hostname'
+                                echo "${WORKSPACE}"
+                                stash name: 'results-test', includes:'result-test.xml'
+                            }
+                        }
+                    }
+                }
+            }
+            
+            post {
+                always {
+                    node('linux2') {
+                        cleanWs(deleteDirs: true)
+                    }
+                }
+            }
+        }
+     
+            
+        stage('Results') {
+            agent {
+                label 'linux'
+            }
+            steps {
+                unstash 'results-unit'
+                unstash 'results-test'
+                junit 'result*.xml'
+                echo 'FINISH!'
+                sh 'whoami'
+                sh 'hostname'
+                echo "${WORKSPACE}"
+            }
+        }
+    }
+}      
