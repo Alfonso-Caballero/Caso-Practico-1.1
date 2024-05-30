@@ -18,7 +18,7 @@ pipeline {
                         catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE'){
                             sh 'whoami'
                             sh 'hostname'
-                            sh "${WORKSPACE}"
+                            echo "${WORKSPACE}"
 
                             sh 'export PYTHONPATH=$WORKSPACE'
 
