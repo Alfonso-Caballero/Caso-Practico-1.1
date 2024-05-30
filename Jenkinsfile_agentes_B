@@ -15,6 +15,7 @@ pipeline {
         }
         stage('Parallel Tests and Analysis') {
             parallel{
+              stage('Unit'){
                 agent{label 'agent1'}
                     steps {
                         catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE'){
