@@ -10,7 +10,7 @@ pipeline {
                 bat 'whoami'
                 bat 'hostname'
                 echo "${WORKSPACE}"
-                stash name: 'code', includes : **
+                stash name: 'code', includes : '**'
             }
         }
         stage('Unit') {
