@@ -13,8 +13,13 @@ pipeline {
             }
         }
         stage('Unit') {
+                agent{label 'agent1'}
                     steps {
                         catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE'){
+                            sh 'whoami'
+                            sh 'hostname'
+                            sh "${WORKSPACE}"
+
                             sh 'export PYTHONPATH=${WORKSPACE}'
 
                             // Run the tests with coverage
