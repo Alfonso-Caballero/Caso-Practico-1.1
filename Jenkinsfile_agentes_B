@@ -12,17 +12,26 @@ pipeline {
                 echo "${WORKSPACE}"
             }
         }
-        stage('Prueba') {
-            agent {
-                label 'agent1'
-                }
-            steps {
-                sh 'whoami'
-                sh 'hostname'
-                echo "${WORKSPACE}"
+        stage('Unit') {
+                    steps {
+                        catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS'){
+                            sh 'export PYTHONPATH=.'
+
+                            // Run the tests with coverage
+                            sh 'coverage run --branch --source=app --omit=app/__init__.py,app/api.py -m pytest --junitxml=result-unit.xml test/unit'
+        
+                            // Generate the coverage XML report
+                            sh 'coverage xml -o test-reports/coverage-unit.xml'
+        
+                            // Process the JUnit XML result
+                            junit 'result-unit.xml'
+        
+                            // Stash the coverage report
+                            stash name: 'coverage', includes: 'test-reports/coverage-unit.xml'
+                        }
+                    }
                 }
             }
-        }
     post {
             always {
                 deleteDir()
