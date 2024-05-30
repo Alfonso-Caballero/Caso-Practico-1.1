@@ -10,6 +10,7 @@ pipeline {
                 bat 'whoami'
                 bat 'hostname'
                 echo "${WORKSPACE}"
+                stash name: 'code', includes : **
             }
         }
         stage('Unit') {
@@ -19,11 +20,12 @@ pipeline {
                             sh 'whoami'
                             sh 'hostname'
                             echo "${WORKSPACE}"
+                            unstash 'code'
 
-                            sh 'export PYTHONPATH=$WORKSPACE/Caso-Practico-1.1'
+                            sh 'export PYTHONPATH=$WORKSPACE'
 
                             // Run the tests with coverage
-                            sh 'python3 -m coverage run --branch --source=app --omit=app/__init__.py,app/api.py -m pytest --junitxml=result-unit.xml Caso-Practico-1.1/test/unit'
+                            sh 'python3 -m coverage run --branch --source=app --omit=app/__init__.py,app/api.py -m pytest --junitxml=result-unit.xml test/unit'
         
                             // Generate the coverage XML report
                             sh 'coverage xml -o test-reports/coverage-unit.xml'
