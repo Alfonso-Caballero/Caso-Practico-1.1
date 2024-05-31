@@ -115,7 +115,7 @@ pipeline {
         stage('Performance') {
                 agent{label 'agent1'}
                     steps {
-                            sh '/home/jenkins-agent/apache-jmeter-5.6.3/bin/jmeter -n -t $WORKSPACE/Caso-Practico-1.1/test/test-plan/test-plan.jmx -f -l flask.jtl'
+                            sh '/home/jenkins-agent/apache-jmeter-5.6.3/bin/jmeter -n -t $WORKSPACE/test/test-plan/test-plan.jmx -f -l flask.jtl'
                             perfReport sourceDataFiles: 'flask.jtl'                       
                 }
                 post {
