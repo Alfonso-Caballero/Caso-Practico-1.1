@@ -122,7 +122,7 @@ pipeline {
                         }
                     }
                 }
-stage("P"){
+stage("Coverage + Performance"){
     parallel{
         stage('Cobertura') {
             agent{label 'agent1'}
