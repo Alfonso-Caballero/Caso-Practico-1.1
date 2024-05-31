@@ -60,7 +60,7 @@ pipeline {
                     agent { label 'agent2' }
                     steps {
                         catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
-                            dir("${WORKSPACE}/Caso-Practico-1.1") {
+                            dir("${WORKSPACE}") {
                                 unstash 'code'
 
                                 sh "java -jar test/wiremock/wiremock-standalone-3.5.4.jar --port 9090 --root-dir test/wiremock &"
@@ -71,7 +71,7 @@ pipeline {
                                     done
                                     '''
                                 sh '''
-                                    export FLASK_APP=$WORKSPACE/Caso-Practico-1.1/app/api.py
+                                    export FLASK_APP=$WORKSPACE/app/api.py
                                     flask run --port=5000 &
                                     '''
                                 sh '''
