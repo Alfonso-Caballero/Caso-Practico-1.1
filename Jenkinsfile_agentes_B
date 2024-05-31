@@ -70,7 +70,7 @@ pipeline {
                                          echo "${WORKSPACE}"
                                          echo "PROBANDO:::::::::"
                                          sh '''
-                                            export FLASK_APP=$WORKSPACE/Caso-Practico-1.1/app
+                                            export FLASK_APP=$WORKSPACE/Caso-Practico-1.1/app/api.py
                                             flask run --port=5000 &
                                             '''
                                          sh '''
