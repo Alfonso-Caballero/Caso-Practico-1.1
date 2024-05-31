@@ -13,6 +13,11 @@ pipeline {
                 stash name: 'code', includes : '**'
             }
         }
+        post {
+                always {
+                    deleteDir()
+                }
+            }
         stage('Parallel Tests and Analysis') {
             parallel {
                 stage('Unit') {
