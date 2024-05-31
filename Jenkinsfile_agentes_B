@@ -57,8 +57,9 @@ pipeline {
                         steps {
                             catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                                 unstash 'code'
-                                    sh "java -jar test/wiremock/wiremock-standalone-3.5.4.jar --port 9090 --root-dir test/wiremock &"
 /*
+                                    sh "java -jar test/wiremock/wiremock-standalone-3.5.4.jar --port 9090 --root-dir test/wiremock &"
+
                                         sh '''
                                             until nc -z localhost 9090; do
                                             echo "Waiting for WireMock server to start..."
