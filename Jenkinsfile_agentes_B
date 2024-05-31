@@ -84,6 +84,8 @@ pipeline {
                                     export PYTHONPATH=$WORKSPACE
                                     pytest --junitxml=result-test.xml test/rest
                                     '''
+                                sh '/home/jenkins-agent2/apache-jmeter-5.6.3/bin/jmeter -n -t $WORKSPACE/test/test-plan/test-plan.jmx -f -l flask.jtl -Djava.util.prefs.userRoot=/home/jenkins-agent2/jmeter_prefs'
+                                perfReport sourceDataFiles: 'flask.jtl' 
                                 sh 'whoami'
                                 sh 'hostname'
                                 echo "${WORKSPACE}"
