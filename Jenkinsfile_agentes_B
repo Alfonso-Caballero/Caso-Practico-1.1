@@ -80,7 +80,7 @@ pipeline {
                                         sleep 1
                                     done
                                     '''
-                                archiveArtifacts artifacts: 'flask', fingerprint: true
+                                archiveArtifacts artifacts: '**/flask/**', fingerprint: true
                                 sh '''
                                     export PYTHONPATH=$WORKSPACE
                                     pytest --junitxml=result-test.xml test/rest
