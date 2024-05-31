@@ -102,8 +102,7 @@ pipeline {
     }
     post {
         always {
-            cleanAgentWorkspace('agent1')
-            cleanAgentWorkspace('agent2')
+            deleteDir()
         }
     }
 }
