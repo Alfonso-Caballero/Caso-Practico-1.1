@@ -90,6 +90,7 @@ pipeline {
                     agent{label 'agent2'}                     
                         steps{
                             catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE'){
+                                unstash 'code'
                                 sh'''
                                     bandit -r . -f custom -o bandit.out -s MEDIUM --msg-template "{abspath}:{line}: [{test_id}] {msg}" || true
                                     '''
