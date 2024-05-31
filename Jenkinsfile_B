@@ -13,10 +13,10 @@ pipeline {
         
                 stage('Unit') {
                     steps {
-                        catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS'){
+                        catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE'){
                             bat '''
                                 set PYTHONPATH=.
-                                coverage run --branch --source=app --omit=app/__init__.py,app/api.py -m pytest --junitxml=result-unit.xml test/unit
+                                coverage run --branch --source=app --omit=app/__init__.py,app/api.py -m pytest --junitxml=result-unit.xml test/unit || exit /b 0
                                 coverage xml -o test-reports/coverage-unit.xml
                                 '''
                             junit 'result-unit.xml'
@@ -27,7 +27,7 @@ pipeline {
                 
                 stage('Rest') {
                     steps {
-                        catchError(buildResult: 'SUCCESS', stageResult: 'SUCCESS'){
+                        catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE'){
                             bat '''
                                 set FLASK_APP=app\\api.py
                                 start flask run
