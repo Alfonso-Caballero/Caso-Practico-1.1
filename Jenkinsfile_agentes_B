@@ -14,12 +14,12 @@ pipeline {
             }
         }
         stage('Parallel Tests and Analysis') {
+            unstash 'code'
             parallel {
                 stage('Unit') {
                     agent { label 'agent1' }
                     steps {
                         catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
-                            unstash 'code'
 
                             sh 'export PYTHONPATH=$WORKSPACE'
 
