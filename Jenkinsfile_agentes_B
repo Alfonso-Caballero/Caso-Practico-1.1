@@ -138,6 +138,7 @@ pipeline {
              agent{label 'agent2'}
                 steps {
                     dir("${WORKSPACE}") {
+                    unstash 'code'
                     sh '''
                         export FLASK_APP=$WORKSPACE/app/api.py
                         nohup flask run --port=5000 &
