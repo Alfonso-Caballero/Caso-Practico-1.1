@@ -107,14 +107,14 @@ pipeline {
     }
     post {
         always {
-            node('agent1){
+            node('agent1'){
                 deleteDir()
                 }
             }
         }
     post {
         always {
-            node('agent2){
+            node('agent2'){
                 deleteDir()
                 }
             }
