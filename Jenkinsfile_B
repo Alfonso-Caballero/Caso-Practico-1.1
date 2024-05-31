@@ -96,7 +96,7 @@ pipeline {
         
         stage('Cobertura') {
             steps {
-                unstash 'coverage'
+                
                 catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE'){
                     // cobertura autoUpdateHealth: false, autoUpdateStability: false, conditionalCoverageTargets: '100, 80, 90', failUnhealthy: false, failUnstable: false, lineCoverageTargets: '100, 85, 95', maxNumberOfBuilds: 0, onlyStable: false, sourceEncoding: 'ASCII', zoomCoverageChart: false, coberturaReportFile: 'test-reports/coverage-unit.xml'
                     cobertura coberturaReportFile: 'test-reports/coverage-unit.xml', conditionalCoverageTargets: '100, 80, 90', failUnstable: false, lineCoverageTargets: '100, 85, 95', onlyStable: false 
