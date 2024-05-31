@@ -70,8 +70,8 @@ pipeline {
                                          echo "${WORKSPACE}"
                                          echo "PROBANDO:::::::::"
                                          sh '''
-                                            export FLASK_APP=$WORKSPACE/Caso-Practico-1.1/app/api.py
-                                            nohup flask run --port=5000 &
+                                            export FLASK_APP=$WORKSPACE/Caso-Practico-1.1/app
+                                            flask run --port=5000 &
                                             '''
                                          sh '''
                                             until nc -z localhost 5000; do
