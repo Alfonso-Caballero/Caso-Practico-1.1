@@ -50,11 +50,6 @@ pipeline {
                             recordIssues tools: [flake8(name: 'Flake8', pattern: 'flake8.out')], qualityGates: [[threshold: 8, type: 'TOTAL', unstable: true], [threshold: 10, type: 'TOTAL', unstable: false]]
                         }
                     }
-                    post {
-                        always {
-                            deleteDir()
-                        }
-                    }
                 }
                 stage('Rest') {
                     agent { label 'agent2' }
@@ -109,10 +104,18 @@ pipeline {
                 }
             }
         }
-    }
-    post {
-        always {
-            deleteDir()
+        stage('Cobertura') {
+            agent{label 'agent1'}
+                steps {   
+                    catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE'){
+                    cobertura coberturaReportFile: 'test-reports/coverage-unit.xml', conditionalCoverageTargets: '100, 80, 90', failUnstable: false, lineCoverageTargets: '100, 85, 95', onlyStable: false 
+                    }
+                }
+            }
+        }
+        post {
+            always {
+                deleteDir()
         }
     }
 }
