@@ -72,7 +72,7 @@ pipeline {
                                     '''
                                 sh '''
                                     export FLASK_APP=$WORKSPACE/app/api.py
-                                    flask run --port=5000 &
+                                    nohup flask run --port=5000 &
                                     '''
                                 sh '''
                                     until nc -z localhost 5000; do
