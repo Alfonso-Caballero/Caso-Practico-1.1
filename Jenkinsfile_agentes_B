@@ -14,13 +14,12 @@ pipeline {
             }
         }
         stage('Parallel Tests and Analysis') {
-            unstash 'code'
             parallel {
                 stage('Unit') {
                     agent { label 'agent1' }
                     steps {
                         catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
-
+                            unstash 'code'
                             sh 'export PYTHONPATH=$WORKSPACE'
 
                             sh 'python3 -m coverage run --branch --source=app --omit=app/__init__.py,app/api.py -m pytest --junitxml=result-unit.xml test/unit'
@@ -40,6 +39,7 @@ pipeline {
                     agent { label 'agent1' }
                     steps {
                         catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
+                            unstash 'code'
                             sh '''
                                 python3 -m flake8 --exit-zero --format=pylint app >flake8.out
                                 '''
@@ -94,6 +94,7 @@ pipeline {
                     agent { label 'agent2' }
                     steps {
                         catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
+                            unstash 'code'
                             sh '''
                                 (bandit -r . -f custom -o bandit.out -l --msg-template "{abspath}:{line}: [{test_id}] {msg}") || exit 0 
                                 '''
