@@ -44,7 +44,6 @@ pipeline {
                 agent{label 'agent1'}
                     steps{
                         catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE'){
-                            unstash 'code'
                             sh '''
                                 python3 -m flake8 --exit-zero --format=pylint app >flake8.out
                                 '''
@@ -67,7 +66,7 @@ pipeline {
                                             done
                                             '''
                                          sh '''
-                                            export FLASK_APP=$WORKSPACE/Caso-Practico-1.1/app/api.py
+                                            export FLASK_APP=/app/api.py
                                             flask run --port=5000 &
                                             '''
                                          sh '''
