@@ -99,38 +99,37 @@ pipeline {
                                 (bandit -r . -f custom -o bandit.out -l --msg-template "{abspath}:{line}: [{test_id}] {msg}") || exit 0 
                                 '''
                             recordIssues tools: [pyLint(name: 'Bandit', pattern: 'bandit.out')], qualityGates: [[threshold: 2, type: 'TOTAL', unstable: true], [threshold: 4, type: 'TOTAL', unstable: false]]
+                                }
+                            }
                         }
                     }
                 }
-            }
-        }
-        stage('Cobertura') {
-            agent{label 'agent2'}
-                steps {
-                    unstash 'coverage'
-                    catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE'){
-                    cobertura coberturaReportFile: 'test-reports/coverage-unit.xml', conditionalCoverageTargets: '100, 80, 90', failUnstable: false, lineCoverageTargets: '100, 85, 95', onlyStable: false 
+                stage('Cobertura') {
+                    agent{label 'agent2'}
+                        steps {
+                            unstash 'coverage'
+                            catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE'){
+                            cobertura coberturaReportFile: 'test-reports/coverage-unit.xml', conditionalCoverageTargets: '100, 80, 90', failUnstable: false, lineCoverageTargets: '100, 85, 95', onlyStable: false 
+                        }
+                    }
                 }
-            }
-        }
-        stage('Performance') {
-                agent{label 'agent2'}
-                    steps {
-                            sh '/home/jenkins-agent2/apache-jmeter-5.6.3/bin/jmeter -n -t $WORKSPACE/test/test-plan/test-plan.jmx -f -l flask.jtl'
-                            perfReport sourceDataFiles: 'flask.jtl'                       
-                }
-/*
+                stage('Performance') {
+                        agent{label 'agent2'}
+                            steps {
+                                    sh '/home/jenkins-agent2/apache-jmeter-5.6.3/bin/jmeter -n -t $WORKSPACE/test/test-plan/test-plan.jmx -f -l flask.jtl'
+                                    perfReport sourceDataFiles: 'flask.jtl'                       
+                                }
+                                post {
+                                    always {
+                                        deleteDir()
+                                }
+                            }
+                        }
+                    }
+
                 post {
                     always {
                         deleteDir()
+                    }
                 }
-            }
-*/
-        }
-    }
-    post {
-        always {
-            deleteDir()
-        }
-    }
 }
