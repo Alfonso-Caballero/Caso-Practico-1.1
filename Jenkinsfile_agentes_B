@@ -109,7 +109,17 @@ pipeline {
                 steps {   
                     catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE'){
                     cobertura coberturaReportFile: 'test-reports/coverage-unit.xml', conditionalCoverageTargets: '100, 80, 90', failUnstable: false, lineCoverageTargets: '100, 85, 95', onlyStable: false 
-                    }
+                }
+            }
+        }
+        stage('Performance') {
+                    steps {
+                            sh '''C:\\Users\\alfcabal\\Downloads\\apache-jmeter-5.6.3\\apache-jmeter-5.6.3\\bin\\jmeter -n -t C:\\Users\\alfcabal\\Downloads\\apache-jmeter-5.6.3\\apache-jmeter-5.6.3\\bin\\test-plan.jmx -f -l flask.jtl'''
+                            perfReport sourceDataFiles: 'flask.jtl'                       
+                }
+                post {
+                    always {
+                        deleteDir()
                 }
             }
         }
@@ -119,4 +129,3 @@ pipeline {
         }
     }
 }
-
