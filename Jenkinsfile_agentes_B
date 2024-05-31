@@ -105,7 +105,7 @@ pipeline {
             }
         }
         stage('Cobertura') {
-            agent{label 'agent1'}
+            agent{label 'agent2'}
                 steps {   
                     catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE'){
                     cobertura coberturaReportFile: 'test-reports/coverage-unit.xml', conditionalCoverageTargets: '100, 80, 90', failUnstable: false, lineCoverageTargets: '100, 85, 95', onlyStable: false 
@@ -113,7 +113,7 @@ pipeline {
             }
         }
         stage('Performance') {
-                agent{label 'agent1'}
+                agent{label 'agent2'}
                     steps {
                             sh '/home/jenkins-agent/apache-jmeter-5.6.3/bin/jmeter -n -t $WORKSPACE/test/test-plan/test-plan.jmx -f -l flask.jtl'
                             perfReport sourceDataFiles: 'flask.jtl'                       
