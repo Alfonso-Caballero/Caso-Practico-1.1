@@ -71,7 +71,7 @@ pipeline {
                                          echo "PROBANDO:::::::::"
                                          sh '''
                                             export FLASK_APP=$WORKSPACE/Caso-Practico-1.1/app/api.py
-                                            flask run --port=5000 &
+                                            nohup flask run --port=5000 &
                                             '''
                                          sh '''
                                             until nc -z localhost 5000; do
