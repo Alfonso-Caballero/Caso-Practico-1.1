@@ -106,7 +106,8 @@ pipeline {
         }
         stage('Cobertura') {
             agent{label 'agent2'}
-                steps {   
+                steps {
+                    unstash 'coverage'
                     catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE'){
                     cobertura coberturaReportFile: 'test-reports/coverage-unit.xml', conditionalCoverageTargets: '100, 80, 90', failUnstable: false, lineCoverageTargets: '100, 85, 95', onlyStable: false 
                 }
