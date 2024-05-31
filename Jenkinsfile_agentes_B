@@ -12,12 +12,7 @@ pipeline {
                 echo "${WORKSPACE}"
                 stash name: 'code', includes : '**'
             }
-        post {
-                always {
-                    deleteDir()
-                }
-            }
-}
+        }
         stage('Parallel Tests and Analysis') {
             parallel {
                 stage('Unit') {
@@ -105,10 +100,6 @@ pipeline {
             }
         }
     }
-    post {
-        always {
-            deleteDir()
-        }
-    }
+    
 }
 
