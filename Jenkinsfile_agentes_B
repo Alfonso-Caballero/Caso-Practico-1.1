@@ -98,6 +98,11 @@ pipeline {
                     }
                 }
             }
+        post {
+                always {
+                    deleteDir()
+                }
+            }
         }
     }
     post {
@@ -105,19 +110,5 @@ pipeline {
             deleteDir()
         }
     }
-    post {
-        always {
-            node('agent1'){
-                deleteDir()
-                }
-            }
-        }
-    post {
-        always {
-            node('agent2'){
-                deleteDir()
-                }
-            }
-        }
 }
 
