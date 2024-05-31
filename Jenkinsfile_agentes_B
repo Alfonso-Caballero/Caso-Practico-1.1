@@ -119,6 +119,12 @@ pipeline {
                                 dir("${WORKSPACE}") {
                                     echo "${WORKSPACE}"
                                 sh '''
+                                    until nc -z localhost 5000; do
+                                        echo "Waiting for Flask server to start..."
+                                        sleep 1
+                                    done
+                                    '''
+                                sh '''
                                     export FLASK_APP=$WORKSPACE/app/api.py
                                     flask run --port=5000 &
                                     '''
