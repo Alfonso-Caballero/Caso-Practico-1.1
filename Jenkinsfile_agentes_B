@@ -86,7 +86,6 @@ pipeline {
                                             }
                                         }
                                     }
-                                }
                 stage('Security'){
                     agent{label 'agent2'}                     
                         steps{
@@ -100,7 +99,7 @@ pipeline {
                         }
                     }
                 }
-
+            }
         post {
                 always {
                     deleteDir()
