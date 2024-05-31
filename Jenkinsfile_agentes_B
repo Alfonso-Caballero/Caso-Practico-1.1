@@ -53,9 +53,9 @@ pipeline {
                             }
                         }
                 stage('Rest') {
-                    agent {label 'agent1'}
+                    agent {label 'agent2'}
                         steps {
-                            catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                            catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
                                 dir ("${WORKSPACE}/Caso-Practico-1.1") {
                                     unstash 'code'
 
