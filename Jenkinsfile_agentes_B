@@ -65,7 +65,7 @@ pipeline {
                                             done
                                             '''
                                          sh '''
-                                            export FLASK_APP=$WORKSPACE
+                                            export FLASK_APP=$WORKSPACE/Caso-Practico-1.1/app/api.py
                                             flask run --port=5000 &
                                             '''
                                          sh '''
