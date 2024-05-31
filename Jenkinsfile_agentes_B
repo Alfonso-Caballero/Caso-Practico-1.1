@@ -123,7 +123,7 @@ pipeline {
                     }
                 }
         stage('Cobertura') {
-            agent{label 'agent2'}
+            agent{label 'agent1'}
                 steps {
                     catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE'){
                     unstash 'coverage'
