@@ -94,6 +94,11 @@ pipeline {
                             }
                         }
                     }
+                    post {
+                        always {
+                            deleteDir()
+                        }
+                    }
                 }
                 stage('Security') {
                     agent { label 'agent2' }
@@ -107,6 +112,11 @@ pipeline {
                             sh 'whoami'
                             sh 'hostname'
                             echo "${WORKSPACE}"
+                                }
+                            }
+                            post {
+                                always {
+                                    deleteDir()
                                 }
                             }
                         }
