@@ -34,6 +34,11 @@ pipeline {
                             echo "${WORKSPACE}"
                         }
                     }
+                    post {
+                        always {
+                            deleteDir()
+                        }
+                    }
                 }
                 stage('Static') {
                     agent { label 'agent1' }
